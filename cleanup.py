@@ -24,6 +24,7 @@ def cleanup():
         account_ids.append(iam.get_user()['User']['Arn'].split(':')[4])
     except Exception as e:
         # use the exception message to get the account ID the function executes under
+        print e
         account_ids.append(re.search(r'(arn:aws:sts::)([0-9]+)', str(e)).groups()[1])
 
 
