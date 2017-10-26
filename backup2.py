@@ -11,7 +11,7 @@ ec = boto3.client('ec2')
 
 def backup(backupGroupName):
     reservations = ec.describe_instances(
-        Filters=[ 
+        Filters=[
             {'Name':'tag:backup', 'Values':['group1']},
         ]
     ).get(
