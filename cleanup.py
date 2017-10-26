@@ -1,6 +1,7 @@
 import boto3
 import re
 import datetime
+import sys
 
 ec = boto3.client('ec2')
 iam = boto3.client('iam')
@@ -9,9 +10,11 @@ iam = boto3.client('iam')
 This function looks at *all* snapshots that have a "DeleteOn" tag containing
 the current day formatted as YYYY-MM-DD. This function should be run at least
 daily.
+
+this function requires the account id, which is passed in (but could also be automatically inferred with the right permission).
 """
 
-def cleanup():
+def cleanup(account_id):
     account_ids = list()
     try:
         """
@@ -21,7 +24,7 @@ def cleanup():
         > iam = boto3.client('iam')
         > print iam.get_user()['User']['Arn'].split(':')[4]
         """
-        account_ids.append(iam.get_user()['User']['Arn'].split(':')[4])
+        account_ids.append(account_id)
     except Exception as e:
         # use the exception message to get the account ID the function executes under
         print e
@@ -41,4 +44,4 @@ def cleanup():
         ec.delete_snapshot(SnapshotId=snap['SnapshotId'])
 
 if __name__ == "__main__":
-    cleanup()
+    cleanup(sys.argv[1])
