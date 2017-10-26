@@ -13,6 +13,7 @@ def backup(backupGroupName):
     reservations = ec.describe_instances(
         Filters=[
             {'Name':'tag:backup', 'Values':[backupGroupName]},
+            {'Name':'tag:Backup', 'Values':[backupGroupName]},
         ]
     ).get(
         'Reservations', []
